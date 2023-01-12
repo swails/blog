@@ -1,0 +1,41 @@
+@startuml
+
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!includeurl DEVICONS/angular.puml
+!includeurl DEVICONS/git.puml
+!includeurl DEVICONS/jira.puml
+!includeurl DEVICONS/jenkins.puml
+!includeurl DEVICONS/java.puml
+!includeurl DEVICONS/msql_server.puml
+!includeurl FONTAWESOME/users.puml
+
+sprite $AzureActiveDirectory [70x70/16z] {
+vTZBRYin30FGw64v-VyFlhTrX25g8X0KPnUkkZfWX_CmSll2w2SGyV41nJty0uX7s25YImazHPOISZAFftB2Y4E94mJAU7yUXn9-X7WSC4RA6tkhinBIHaYP
+SpOPSLBcRw9xPP4asenloaH6Rnva_edt4IY8DUOX1T76FAGWqa2Wz1clbNflgvNxJwAD-8QiZCOyfDolM75bAOIiQ0intuY2OS7CL8sKZ9H82gfG29h5F0bi
+2ad120cai3HeO_mJXGBfyV1j7W9OuMotZS1eAFoMq7Uwy7CWrbJokoAIyxYWJg7G2zZdl3RMz0g5YkZw4yynrM65N-7ZETJ08sXR7LBeNMVN7UXP1NN42YNd
+bS1TZ3Aeewpml0xZgIeStUgm4d8LsHycepgl5ASYaaPHntXU5F4NRmOQtMZUD504aLTrZEQbxq1L1uhjLpNgZu2XZc5UWx5K2jNHhBEKd9VVbNMTXEsQ5qNq
+LaIfJiwB8juy1brB3XYOjrU7v-MKeqjC-f2rwnXwe4YxphZplFqwW-RjnQ0qY_3eW-PjnvwAd_zOWNaFOdRxmlm7
+}
+
+Person(user, "Developer", $sprite="users")
+Container(auth, "Auth Provider", "Active Directory", $sprite="AzureActiveDirectory")
+System_Boundary(system, "Software Engineering Infrastructure") {
+    Container(github, "Version Control System", "GitHub, GitLab, or BitBucket", "The location for all source code repositories.", $sprite="git")
+    Container(issue_tracker, "Issue Tracker", "Jira, Asana, Trello", $sprite="jira")
+    Container(cicd_server, "CI/CD Service", "Jenkins, GitHub Actions, GitLab, CircleCI, BuildKite", "Executes process automation", $sprite="jenkins")
+    ContainerDb(package_repo, "Package Manager Repository", "Artifactory, Sonatype Nexus", "Stores software packages (e.g., docker, npm, pip, conda, etc.)")
+}
+
+Rel_R(user, github, "Push/Pull/Review")
+Rel_R(user, issue_tracker, "Uses")
+Rel_U(user, auth, "Auth")
+Rel(user, package_repo, "Downloads")
+Rel_U(system, auth, "Auth")
+Rel_D(issue_tracker, github, "Link")
+Rel_L(github, cicd_server, "Triggers")
+Rel_D(cicd_server, package_repo, "Pushes")
+Rel_D(package_repo, cicd_server, "Pulls")
+@enduml

@@ -36,3 +36,77 @@ Software developers rightly recognize this as a description of [technical debt](
 # Designing Sustainable Software Engineering
 
 For startups or other small companies that are adding a software engineering capability for the first time, the small core team of software developers may lack the experience needed to establish sound practices at the outset. The purpose of this article until this point has been to convince you of the importance of adopting and employing modern software development tooling. The rest is devoted to what tooling is needed, and how it should be employed to establish your software engineering capability on a sound footing.
+
+I've found that a sufficient nucleus that helps foster a robust and sustainable software engineering capability can be deployed via the components shown below.
+
+![Software Engineering Core](tooling.svg)
+
+In the sections below, I'll briefly describe the importance of each component as well as the choices of available Software as a Service (SaaS) offerings that satisfy each one.
+
+## Auth Provider
+
+The Auth Provider supplies both *Authentication* (establishing that a user or application *is* who they claim to be) and *Authorization* (declares that the authenticated user has the permission to do something).
+
+Having a centralized Auth Provider is critical to scaling an organization. While a company may start out by employing a small handful of services, those few services quickly grows. Without a centralized Auth Provider, each application will need to maintain its own internal list of users making it effectively impossible to implement security standards surrounding multifactor authentication and strength of password.
+
+Any tool you onboard into your organization should integrate using some standardized Auth mechanism, like SAML 2.0, to your centralized Auth Provider. This is a feature known as "Single Sign-On", or SSO – that is you are able to sign into every company service or system with a single account.
+
+### Recommendation
+
+You typically have little choice in this Auth Provider, as it is usually established with the company. Common choices are Azure Active Directory (from Microsoft), or an offering from Okta or Auth0. Any of these will support SAML 2.0 and enable SSO.
+
+## Version Control System (VCS)
+
+Building modern, collaborative software projects is impossible without a Version Control System. The most common commercial options for these platforms are [GitHub](https://github.com), [GitLab](https://gitlab.com), and [BitBucket](https://bitbucket.org). There are, of course, many others.
+
+The VCS will serve as the centralized hub that drives almost all of your software engineering process. It is here that you will define automations of your developer operations, code review policy, and tag versioned releases of your source code.
+
+### Recommendation
+
+I've used all 3 in professional settings. I've managed a private GitLab instance for a community-driven project and both GitHub and BitBucket Server at commercial companies.
+
+I would personally recommend GitHub or GitLab, as the integrated CI/CD offering provided with the platform allows you to leverage the same platform for for both VCS and CI/CD.
+
+## CI/CD Service
+
+The CI/CD service – standing for Continuous Integration and Continuous Deployment (or Continuous Delivery) – is the platform that allows you to automate developer operations. You will use it to automatically run a test suite to gate pull requests to drive code quality, and it provides a platform to automate building and deploying software packages.
+
+### Recommendation
+
+If you selected either GitHub or GitLab as the VCS provider, I highly recommend using either GitHub Actions or GitLab CI, respectively. Both are mature, capable platforms that will allow you to do almost anything you want.
+
+Jenkins is a highly capable platform, and CloudBees offers commercial support for it as a platform. However, I'd recommend platforms with a lower barrier to entry such as Azure Pipelines, CircleCI, or BuildKite.
+
+## Package Manager Repositories
+
+This piece is critical and often overlooked. Package manager repositories provide a place to push software artifacts that can be pulled into development environments by the software engineering team. Most programming languages come with package managers built-in, summarized for some languages below.
+
+| Language | Package Manager | Public Package Repository |
+|----------|-------|----|
+| Python | pip | pypi.org |
+| Python | conda | conda.anaconda.org |
+| JavaScript | npm | registry.npmjs.org |
+| C# | nuget | nuget.org |
+| Docker | docker | hub.docker.co | 
+| Rust | cargo | crate.io |
+| go | go get | git repositories |
+| swift | Swift Package Manager | swift.org |
+| Kubernetes | helm | Decentralized - many organizations host their own |
+
+Even if your organization only uses one, or predominantly one, programming language, you are likely to use multiple package managers for different technologies in your stack. For instance, if you employ Python code deployed in a Kubernetes environment you are likely to make use of pip or conda packages, Docker (container) images, and possibly helm charts.
+
+Publishing your libraries to package manager repositories makes it easy to deploy well-defined, reproducible production environments to any computer infrastructure in your organization. This includes developer machines, a private data center, or either public or private clouds. Environments can often be declared in a single file that lists the packages with any relevant version pins.
+
+While tags in your VCS can often be modified, you can establish policy in your package repositories to prohibit overwriting or deleting packages which eliminates uncertainty surrounding the *exact* version of the code deployed in production that encountered a reported bug.
+
+### Recommendation
+
+If your company is exclusively publishing open source packages and libraries, you can publish to public repositories directly, setting up a single company-wide service account to provide push access for your packages from automated pipelines run from your CI/CD service.
+
+However, if any of your software is exclusively for internal use and you want to restrict access to your software engineering team, then most package managers require paid service contracts to provide private package repositories.
+
+Alternatively, you can use platforms that support many different package manager protocols directly, using the same platform to host all of your different package types.
+
+Both [GitHub](https://github.com/features/packages) and [GitLab](https://docs.gitlab.com/ee/user/packages/package_registry/supported_package_managers.html) offer repositories for a small number of package managers. If those are sufficient, I would recommend using GitHub or GitLab. Dedicated package repository services are extremely valuable and well worth the monthly expense. Both [JFrog Artifactory](https://jfrog.com/artifactory/) and [Sonatype Nexus](https://www.sonatype.com/products/nexus-repository) satisfy the requirements here.
+
+I recommend using Artifactory, as it is the only platform with a fully managed option (Nexus requires you to provision and maintain your own infrastructure to host it).
