@@ -1,6 +1,6 @@
 # The Anatomy of a Successful Software Engineering Capability
 
-There are more ways to engineer software poorly than well. The better a software engineering capability is run, the more quantifiable value is added by that capability. More efficient software develpoment practices yield more features over a given period of time, fewer bugs, and a faster mean time to resolve issues in production (bugs and issues are faster to identify, isolate, reproduce, fix, and deploy or release updates). These can either drive additional revenue or boost efficiency to reduce operating expenses.
+There are more ways to engineer software poorly than well. The better a software engineering capability is run, the more quantifiable value is added by that capability. More efficient software development practices yield more features over a given period of time, fewer bugs, and a faster mean time to resolve issues in production (bugs and issues are faster to identify, isolate, reproduce, fix, and deploy or release updates). This can either drive additional revenue or boost efficiency to reduce operating expenses.
 
 The purpose of this article is to describe the minimal tooling needed to build the foundation of successful software engineering operations. I will not discuss best practices in coding, but rather how to deploy and configure code development tools in a way that provides a stable foundation for the growth of a healthy and productive software development capability from inception.
 
@@ -72,7 +72,7 @@ If GitHub Actions or GitLab CI are not options or you are using a self-hosted Gi
 
 ## Package Manager Repositories
 
-This piece is critical and often overlooked. Package manager repositories provide a place to push software artifacts that can be pulled into development environments by the software engineering team. Most programming languages come with package managers built-in, summarized for some languages below.
+This piece is critical and often overlooked. Package manager repositories provide a place to push software packages that can then be deployed to production services or pulled by developers (or customers) to deploy directly to their devices. Most programming languages come with package managers built-in, summarized for some languages below.
 
 | Language | Package Manager | Public Package Repository |
 |----------|-------|----|
@@ -82,11 +82,10 @@ This piece is critical and often overlooked. Package manager repositories provid
 | C# | nuget | nuget.org |
 | Docker | docker | hub.docker.co | 
 | Rust | cargo | crate.io |
-| go | go get | git repositories |
 | swift | Swift Package Manager | swift.org |
-| Kubernetes | helm | Decentralized - many organizations host their own |
+| Kubernetes | helm | Decentralized |
 
-Even if your organization only uses one, or predominantly one, programming language, you are likely to use multiple package managers for different technologies in your stack. For instance, if you employ Python code deployed in a Kubernetes environment you are likely to make use of pip or conda packages, Docker (container) images, and possibly helm charts.
+Even if your organization only uses one, or predominantly one, programming language, you are likely to use multiple package managers for different technologies in your stack. For instance, Docker container images are often leveraged to provide consistent, reliable environments for running continuous integration testing and to build software packages you intend to publish for release.
 
 Publishing your libraries to package manager repositories makes it easy to deploy well-defined, reproducible production environments to any computer infrastructure in your organization. This includes developer machines, a private data center, or either public or private clouds. Environments can often be declared in a single file that lists the packages with any relevant version pins.
 
@@ -99,3 +98,27 @@ Most public package manager repositories require paid service contracts to provi
 Both [GitHub](https://github.com/features/packages) and [GitLab](https://docs.gitlab.com/ee/user/packages/package_registry/supported_package_managers.html) offer repositories for a small number of package managers. If your VCS is sufficient, use that as your package repository. Dedicated package repository services are extremely valuable and well worth the monthly expense. Both [JFrog Artifactory](https://jfrog.com/artifactory/) and [Sonatype Nexus](https://www.sonatype.com/products/nexus-repository) satisfy the requirements here.
 
 I recommend using Artifactory, as it is the only platform with a fully managed option (Nexus requires you to provision and maintain your own infrastructure to host it).
+
+## Issue Tracker
+
+Issue trackers are used to keep track of work that needs to be done from fixing bugs to adding new features. They help to communicate priorities as the team grows, and when used properly can facilitate efficient teamwork by allowing any of a number of developers to work on a given task.
+
+If and when your organization grows to the point where a project manager is a worthwhile investment, the issue tracker becomes one of their most valuable tools to interface with the engineering team.
+
+### Recommendation
+
+GitHub and GitLab both provide issue trackers as part of a source code repository. While less flexible than dedicated solutions, they can satisfy this role for early-stage development.
+
+When a more comprehensive solution is required, the only issue tracker I've used that I would recommend is Jira. Other popular options I've not tried before include Asana and Trello. There are *many* others.
+
+## Wiki
+
+While developing software, it is important to record important decisions and information about the design of your software. This is important both to help onboard new team members as the team grows and to remind the original authors of important details they may have forgotten.
+
+I've found wikis to be an effective medium to keep this sort of documentation (although using the web hosting abilities of GitHub and GitLab by rendering markdown or reStructuredText to web pages using utilities like `sphinx` or `mkdocs` would also work).
+
+### Recommendation
+
+For basic code-documenting wikis, the offering provided by the VCS (like GitHub or GitLab) may be sufficient. At a minimum, it is a good place to start, and content can be migrated if your needs expand to require a more comprehensive solution.
+
+For a dedicated solution, I would recommend Confluence. It is easy to get started with, but has plenty of advanced features to help standardize and organize content generation.

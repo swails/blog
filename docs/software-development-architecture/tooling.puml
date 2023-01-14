@@ -4,10 +4,11 @@
 !includeurl https://raw.githubusercontent.com/Roemer/plantuml-misc/master/misc/artifactory.puml
 
 !define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
 !define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
-!includeurl DEVICONS/angular.puml
 !includeurl DEVICONS/git.puml
 !includeurl DEVICONS/jira.puml
+!includeurl DEVICONS2/confluence_original.puml
 !includeurl DEVICONS/jenkins.puml
 !includeurl DEVICONS/java.puml
 !includeurl DEVICONS/msql_server.puml
@@ -21,24 +22,29 @@ bS1TZ3Aeewpml0xZgIeStUgm4d8LsHycepgl5ASYaaPHntXU5F4NRmOQtMZUD504aLTrZEQbxq1L1uhj
 LaIfJiwB8juy1brB3XYOjrU7v-MKeqjC-f2rwnXwe4YxphZplFqwW-RjnQ0qY_3eW-PjnvwAd_zOWNaFOdRxmlm7
 }
 
+AddRelTag("optional", $lineStyle=DashedLine())
+
 Person(user, "Developer", $sprite="users")
 Container(auth, "Auth Provider", "Active Directory", $sprite="AzureActiveDirectory")
 System_Boundary(system, "Software Engineering Infrastructure") {
     Container(github, "Version Control System", "GitHub, GitLab, or BitBucket", "The location for all source code repositories.", $sprite="git")
     Container(issue_tracker, "Issue Tracker", "Jira, Asana, Trello", $sprite="jira")
     Container(cicd_server, "CI/CD Service", "Jenkins, GitHub Actions, GitLab, CircleCI, BuildKite", "Executes process automation", $sprite="jenkins")
+    Container(wiki, "Wiki", "Confluence, GitHub, GitLab", "A place to maintain notes and documentation", $sprite="confluence_original")
     ContainerDb(package_repo, "Package Manager Repository", "Artifactory, Sonatype Nexus", "Stores software packages (e.g., docker, npm, pip, conda, etc.)", $sprite="artifactory")
 }
 
 Rel_R(user, github, "Push/Pull/Review")
 Rel_R(user, issue_tracker, "Uses")
 Rel_U(user, auth, "Auth")
-Rel(user, package_repo, "Downloads")
+Rel(user, package_repo, "Downloads\npackages")
 Rel_U(system, auth, "Auth (each component)")
-Rel_D(issue_tracker, github, "Link")
-Rel_U(github, issue_tracker, "Advance issue workflow")
+Rel_U(issue_tracker, github, "Link")
+Rel_D(github, issue_tracker, "Advance issue workflow")
 Rel_L(github, cicd_server, "Triggers")
 Rel_R(cicd_server, github, "Pulls")
 Rel_D(cicd_server, package_repo, "Pushes")
 Rel_D(package_repo, cicd_server, "Pulls")
+Rel_U(wiki, issue_tracker, "Synchronize", "optional", $tags="optional")
+Rel(user, wiki, "Document")
 @enduml
