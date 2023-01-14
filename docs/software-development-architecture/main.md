@@ -1,6 +1,6 @@
 # The Anatomy of a Successful Software Engineering Capability
 
-There are more ways to engineer software poorly than well. The better a software engineering capability is run, the more quantifiable value is added by that capability. More efficient software development practices yield more features over a given period of time, fewer bugs, and a faster mean time to resolve issues in production (bugs and issues are faster to identify, isolate, reproduce, fix, and deploy or release updates). This can either drive additional revenue or boost efficiency to reduce operating expenses.
+There are more ways to engineer software poorly than well. The better a software engineering capability is run, the more quantifiable value is added by that capability. More efficient software development practices yield more features over a given period of time, fewer bugs, and a faster mean time to resolve issues in production. This can either drive additional revenue or boost efficiency to reduce operating expenses.
 
 The purpose of this article is to describe the minimal tooling needed to build the foundation of successful software engineering operations. I will not discuss best practices in coding, but rather how to deploy and configure code development tools in a way that provides a stable foundation for the growth of a healthy and productive software development capability from inception.
 
@@ -20,7 +20,7 @@ I've found one of the key differentiators between well-run and poorly-run softwa
 
 *Process* is the combination of policy and prescribed operational steps required for any software development or release activity. For example, requiring all changes to pass through code review and be approved by at least one "code owner" before being merged is an example of process in code development. Requiring that released software be given a "tag" with the version number which is subsequently built into the source code before deploying a package is an example of process in software release or deployment.
 
-Choosing the right software development tools makes it possible to *enforce* policy and process by explicitly prohibiting either intentional or accidental violations. For example, a proper version control system (VCS) will allow you to "protect" branches by prohibiting changes made without pull requests or lacking specific approvals following code review. Likewise, a suitably configured CI/CD service and package manager repositories will only permit package deployment that passes through an automated process that performs the necessary version injection and build steps from a consistent environment like a specific Docker container image.
+Choosing the right software development tools makes it possible to *enforce* policy and process by explicitly prohibiting either intentional or accidental violations. For example, a proper version control system (VCS) will allow you to "protect" branches by prohibiting changes made without pull requests or lacking specific approvals following code review. Likewise, a suitably configured CI/CD service and package manager repositories will only permit package deployment that passes through an automated process that performs the necessary version injection and build steps from a consistent build environment.
 
 Teams that opt to forego implementing process inevitably become paralyzed by that choice as both the team and code base grows. Identifying and reproducing bugs that appear in production becomes a chore as significant time needs to be spent determining what *exact* version of the code was deployed, *how* it was built and/or deployed, and reproducing the issue in a way that it can be reliably fixed. The complexity of deploying software grows as new features require small tweaks which continue to build up. Fear of breaking the house of cards drives teams to lengthen the deployment schedule and increase the effort expended each time.
 
@@ -34,7 +34,7 @@ I've found that a sufficient nucleus that helps foster a robust and sustainable 
 
 ![Software Engineering Core](tooling.svg)
 
-In the sections below, I'll briefly describe the importance of each component as well as the options and recommendations to satisfy each one.
+In the following sections, I'll briefly describe the importance of each component as well as the options and recommendations to satisfy each one.
 
 ## Auth Provider
 
@@ -52,7 +52,7 @@ You typically have little choice in this Auth Provider, as it is usually establi
 
 Building modern, collaborative software projects is impossible without a Version Control System. The most common commercial options for these platforms are [GitHub](https://github.com), [GitLab](https://gitlab.com), and [BitBucket](https://bitbucket.org). There are, of course, many others.
 
-The VCS will serve as the centralized hub that drives almost all of your software engineering process. It is here that you will define automations of your developer operations, code review policy, and tag versioned releases of your source code.
+The VCS will serve as the centralized hub that drives almost all of your software engineering process. In addition to storing your source code, it is here that you will define automations of your developer operations, code review policy, and tag versioned releases of that source code.
 
 ### Recommendation
 
@@ -89,7 +89,7 @@ Even if your organization only uses one, or predominantly one, programming langu
 
 Publishing your libraries to package manager repositories makes it easy to deploy well-defined, reproducible production environments to any computer infrastructure in your organization. This includes developer machines, a private data center, or either public or private clouds. Environments can often be declared in a single file that lists the packages with any relevant version pins.
 
-While tags in your VCS can often be modified, you can establish policy in your package repositories to prohibit overwriting or deleting packages. This eliminates uncertainty surrounding the *exact* version of the code deployed in production that encountered a reported bug relative to a strategy that deploys software versions through git tags.
+While tags in your VCS can be moved or deleted, you can establish policy in your package repositories to prohibit overwriting or deleting packages. This eliminates uncertainty surrounding the *exact* version of the code deployed in production that encountered a reported bug relative to a strategy that deploys software versions through git tags or, worse, git branches.
 
 ### Recommendation
 
@@ -109,7 +109,7 @@ If and when your organization grows to the point where a project manager is a wo
 
 GitHub and GitLab both provide issue trackers as part of a source code repository. While less flexible than dedicated solutions, they can satisfy this role for early-stage development.
 
-When a more comprehensive solution is required, the only issue tracker I've used that I would recommend is Jira. Other popular options I've not tried before include Asana and Trello. There are *many* others.
+When a more comprehensive solution is required, the only issue tracker I've used that I would recommend is Jira. Other popular options I've not tried before include Asana and Trello, but there are *many* others.
 
 ## Wiki
 
